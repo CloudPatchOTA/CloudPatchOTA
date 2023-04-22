@@ -10,8 +10,8 @@ const char* host = "http://3.110.114.64/“;
 const int port = 443;
 
 // Update file variables
-const char* updateUrl = "http://3.110.114.64/update.bin”;
-const char* updateFilename = "update.bin";
+const char* updateUrl = "http://13.233.137.149/updated.bin”;
+const char* updateFilename = "updated.bin";
 
 // Task handle for Communication module task
 TaskHandle_t CommunicationTaskHandle = NULL;
