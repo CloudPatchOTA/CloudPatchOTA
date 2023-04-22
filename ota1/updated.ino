@@ -6,6 +6,10 @@
 
 #define ledPin 2
 
+void setup(void) {
+  Serial.begin(115200);
+  pinMode(ledPin, OUTPUT);
+}
 void loop(void) {
   server.handleClient();
   
