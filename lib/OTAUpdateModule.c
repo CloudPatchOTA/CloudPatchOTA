@@ -1,41 +1,64 @@
+
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include <SPIFFS.h>
 #include <Update.h>
 
-HTTPClient http;
+#define USE_SERIAL Serial
 
-void WritePatchToFlash(char* LinkToPatchBinary) {
-  WiFi.begin("your_wifi_ssid", "your_wifi_password");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
-  }
+void DownloadAndApplyPatch(char* LinkToPatchBinary) {
+  WiFiClient client;
+  HTTPClient http;
 
-  if (!SPIFFS.begin(true)) {
-    Serial.println("An error occurred while mounting SPIFFS");
-    return;
-  }
+  Serial.print("Downloading patch binary from ");
+  Serial.println(LinkToPatchBinary);
 
-  http.begin(LinkToPatchBinary);
-  int httpCode = http.GET();
+  // Connect to the server
+  if (http.begin(client, LinkToPatchBinary)) {
+    // Send HTTP GET request
+    int httpCode = http.GET();
 
-  if (httpCode == HTTP_CODE_OK) {
-    File file = SPIFFS.open("/patch.bin", "w");
-    http.writeToStream(&file);
-    file.close();
+    // Check for HTTP response code
+    if (httpCode == HTTP_CODE_OK) {
+      // Get the content length of the response
+      int contentLength = http.getSize();
 
-    if (Update.begin()) {
-      Serial.println("Starting OTA update");
-      Update.run();
-      Serial.println("OTA update complete");
+      if (contentLength > 0) {
+        // Create a buffer to store the binary data
+        uint8_t buffer[contentLength];
+        WiFiClient * stream = http.getStreamPtr();
+
+
+        // Read the response into the buffer
+        //int bytesRead = http.readBytes(buffer, contentLength);
+        int bytesRead = Stream->readBytes( buffer , contentLength  )
+
+        if (bytesRead == contentLength) {
+          // Close the HTTP connection
+          http.end();
+
+          // Apply the patch binary using the ESP32's OTA library
+          if (Update.begin(contentLength)) {
+            Update.write(buffer, contentLength);
+            if (Update.end()) {
+              Serial.println("Patch binary installation successful");
+              ESP.restart();
+            } else {
+              Serial.println("Patch binary installation failed");
+            }
+          } else {
+            Serial.println("Patch binary installation failed to begin");
+          }
+        } else {
+          Serial.println("Error reading patch binary");
+        }
+      } else {
+        Serial.println("Content length is zero");
+      }
     } else {
-      Serial.println("OTA update failed");
+      Serial.print("HTTP GET request failed, error: ");
+      Serial.println(http.errorToString(httpCode).c_str());
     }
   } else {
-    Serial.println("Failed to download patch binary");
+    Serial.println("Failed to connect to server");
   }
-
-  http.end();
-  SPIFFS.end();
 }
