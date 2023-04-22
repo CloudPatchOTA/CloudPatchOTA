@@ -11,7 +11,6 @@ void setup(void) {
   pinMode(ledPin, OUTPUT);
 }
 void loop(void) {
-  server.handleClient();
   
   digitalWrite(ledPin, HIGH);
   delay(500);
