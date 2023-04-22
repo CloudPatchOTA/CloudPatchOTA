@@ -13,16 +13,19 @@ void DownloadAndApplyPatch(char* LinkToPatchBinary) {
   Serial.println(LinkToPatchBinary);
 
   // Connect to the server
-  if (http.begin(client, LinkToPatchBinary)) {
+  if (http.begin(client, LinkToPatchBinary))
+  {
     // Send HTTP GET request
     int httpCode = http.GET();
 
     // Check for HTTP response code
-    if (httpCode == HTTP_CODE_OK) {
+    if (httpCode == HTTP_CODE_OK)
+    {
       // Get the content length of the response
       int contentLength = http.getSize();
 
-      if (contentLength > 0) {
+      if (contentLength > 0)
+      {
         // Create a buffer to store the binary data
         uint8_t buffer[contentLength];
         WiFiClient * stream = http.getStreamPtr();
@@ -30,35 +33,48 @@ void DownloadAndApplyPatch(char* LinkToPatchBinary) {
 
         // Read the response into the buffer
         //int bytesRead = http.readBytes(buffer, contentLength);
-        int bytesRead = Stream->readBytes( buffer , contentLength  )
-
-        if (bytesRead == contentLength) {
+        int bytesRead = stream->readBytes( buffer , contentLength  );
+        if (bytesRead == contentLength)
+        {
           // Close the HTTP connection
           http.end();
 
           // Apply the patch binary using the ESP32's OTA library
-          if (Update.begin(contentLength)) {
+          if (Update.begin(contentLength))
+          {
             Update.write(buffer, contentLength);
-            if (Update.end()) {
+            if (Update.end())
+            {
               Serial.println("Patch binary installation successful");
               ESP.restart();
-            } else {
+            } else
+            {
               Serial.println("Patch binary installation failed");
             }
-          } else {
+          } 
+          else
+          {
             Serial.println("Patch binary installation failed to begin");
           }
-        } else {
+        }
+        else
+        {
           Serial.println("Error reading patch binary");
         }
-      } else {
+      } 
+      else
+      {
         Serial.println("Content length is zero");
       }
-    } else {
+    }
+    else
+    {
       Serial.print("HTTP GET request failed, error: ");
       Serial.println(http.errorToString(httpCode).c_str());
     }
-  } else {
+  }
+  else
+  {
     Serial.println("Failed to connect to server");
   }
 }
