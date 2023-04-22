@@ -53,7 +53,7 @@ const char* loginIndex =
     "}"
     "else"
     "{"
-    " alert('Error Password or Username')/*displays error message*/"
+    " alert('Error Password or Username')/displays error message/"
     "}"
     "}"
 "</script>";
@@ -121,7 +121,7 @@ void setup(void) {
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
-  /*use mdns for host name resolution*/
+  //use mdns for host name resolution/
   if (!MDNS.begin(host)) { //http://esp32.local
     Serial.println("Error setting up MDNS responder!");
     while (1) {
@@ -174,6 +174,4 @@ void loop(void) {
  
   digitalWrite(ledPin, LOW);
   delay(3000);
-  
-  
 }
