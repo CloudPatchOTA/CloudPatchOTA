@@ -67,11 +67,37 @@ void DownloadAndApplyPatch(char* LinkToPatchBinary) {
     Serial.println("Failed to connect to server");
   }
 }
-void setup(void )
+
+void setup(void)
 {
+  // Initialize serial port
+  Serial.begin(115200);
+  const char* ssid = "El-Dorado 2.4G";
+const char* password = "savithabhabi";
+  /*
+  // Connect to WiFi network
+  char* ssid = "your_ssid";
+  char* password = "your_password";
+  */
+  WiFi.begin(ssid, password);
+  Serial.println("");
+
+  // Wait for connection
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
   char* LinkToPatchBinary = "13.233.137.149/updated.bin";
   //DownloadAndApplyPatch(LinkToPatchBinary);
+  // ...
 }
+
 
 void loop(void) {
   server.handleClient();
