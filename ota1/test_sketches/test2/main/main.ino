@@ -35,9 +35,14 @@ const char* SSID = "YOUR-SSID";
 const char* PSWD = "YOUR-SSID-PSWD";
 
 // S3 Bucket Config
-String host = "bucket-name.s3.ap-south-1.amazonaws.com"; // Host => bucket-name.s3.region.amazonaws.com
+
+//String host = "bucket-name.s3.ap-south-1.amazonaws.com"; // Host => bucket-name.s3.region.amazonaws.com
+String host = "https://bucketformyfrontendapplication.s3.ap-south-1.amazonaws.com/";
+
 int port = 80; // Non https. For HTTPS 443. As of today, HTTPS doesn't work.
-String bin = "/sketch-name.ino.bin"; // bin file name with a slash in front.
+
+//String bin = "/sketch-name.ino.bin"; // bin file name with a slash in front.
+String bin = "/updated.bin";
 
 // Utility to extract header value from headers
 String getHeaderValue(String header, String headerName) {
