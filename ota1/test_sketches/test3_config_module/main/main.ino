@@ -1,9 +1,22 @@
+#include<SPIFFS.h>
+
 int LED_BUILTIN = 2;
 
 void setup() {
+  Serial.begin(115200);
   pinMode (LED_BUILTIN, OUTPUT);
+
+  SPIFFS.format();
+  SPIFFS.begin();
+
+  long totalBytes = SPIFFS.totalBytes();
+  long usedBytes = SPIFFS.usedBytes();
+
+  Serial.println("Total bytes: " + String(totalBytes));
+  Serial.println("Used bytes: " + String(usedBytes));
 }
 void loop() {
+  
   digitalWrite(LED_BUILTIN, HIGH);
   delay(1000);
   digitalWrite(LED_BUILTIN, LOW);
