@@ -1,5 +1,5 @@
 #include<SPIFFS.h>
-
+#include <esp_system.h>
 int LED_BUILTIN = 2;
 
 void setup() {
@@ -14,6 +14,11 @@ void setup() {
 
   Serial.println("Total bytes: " + String(totalBytes));
   Serial.println("Used bytes: " + String(usedBytes));
+
+   size_t freeBytes = esp_get_free_heap_size();
+
+  // Print out the number of free bytes in the heap.
+  Serial.println("Free bytes: " + String(freeBytes));
 }
 void loop() {
   
