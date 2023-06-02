@@ -83,7 +83,7 @@
     AWS.config.update({
       accessKeyId: 'AKIAYPZ2W5VW3TOQKTE7',
       secretAccessKey: 'BXPKriTVIIQKtQ3uE9VueBY8YVxUPkTe031TBsYM',
-      region: 'YOUR_S3_REGION'
+      region: 'ap-south-1'
     });
 
     // Handle form submission
@@ -101,7 +101,7 @@
       // Upload the file to Amazon S3
       var s3 = new AWS.S3();
       var params = {
-        Bucket: 'YOUR_BUCKET_NAME',
+        Bucket: 'bucketwithota',
         Key: file.name,
         Body: file
       };
