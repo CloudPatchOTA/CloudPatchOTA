@@ -1,23 +1,4 @@
-/**
-   AWS S3 OTA Update
-   Date: 14th June 2017
-   Author: Arvind Ravulavaru <https://github.com/arvindr21>
-   Purpose: Perform an OTA update from a bin located in Amazon S3 (HTTP Only)
 
-   Upload:
-   Step 1 : Download the sample bin file from the examples folder
-   Step 2 : Upload it to your Amazon S3 account, in a bucket of your choice
-   Step 3 : Once uploaded, inside S3, select the bin file >> More (button on top of the file list) >> Make Public
-   Step 4 : You S3 URL => http://bucket-name.s3.ap-south-1.amazonaws.com/sketch-name.ino.bin
-   Step 5 : Build the above URL and fire it either in your browser or curl it `curl -I -v http://bucket-name.ap-south-1.amazonaws.com/sketch-name.ino.bin` to validate the same
-   Step 6:  Plug in your SSID, Password, S3 Host and Bin file below
-
-   Build & upload
-   Step 1 : Menu > Sketch > Export Compiled Library. The bin file will be saved in the sketch folder (Menu > Sketch > Show Sketch folder)
-   Step 2 : Upload bin to S3 and continue the above process
-
-   // Check the bottom of this sketch for sample serial monitor log, during and after successful OTA Update
-*/
 
 #include <WiFi.h>
 #include <Update.h>
