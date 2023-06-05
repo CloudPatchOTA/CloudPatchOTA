@@ -2,30 +2,20 @@
 
 #include <WiFi.h>
 #include <Update.h>
-
-WiFiClient client;
-
-
-long contentLength = 0;
-bool isValidContentType = false;
-
-
-const char* SSID = "YOUR-SSID";
-const char* PSWD = "YOUR-SSID-PSWD";
-
-
+/*
 String host = "https://bucketformyfrontendapplication.s3.ap-south-1.amazonaws.com/";
-
-int port = 80;.
-
+int port = 80;
 String bin = "/updated.bin";
+*/
 
 String getHeaderValue(String header, String headerName) {
   return header.substring(strlen(headerName.c_str()));
 }
 
 // OTA Logic 
-void execOTA(String host,int port,String bin) {
+void execOTA(WiFiClient client,String host,int port,String bin) {
+  long contentLength = 0;
+  bool isValidContentType = false;
   Serial.println("Connecting to: " + String(host));
   // Connect to S3
   if (client.connect(host.c_str(), port)) {
@@ -40,11 +30,6 @@ void execOTA(String host,int port,String bin) {
                  "Connection: close\r\n\r\n");
 
     // Check what is being sent
-    //    Serial.print(String("GET ") + bin + " HTTP/1.1\r\n" +
-    //                 "Host: " + host + "\r\n" +
-    //                 "Cache-Control: no-cache\r\n" +
-    //                 "Connection: close\r\n\r\n");
-
     unsigned long timeout = millis();
     while (client.available() == 0) {
       if (millis() - timeout > 5000) {
@@ -152,29 +137,6 @@ void execOTA(String host,int port,String bin) {
   }
 }
 
-void setup() {
-  //Begin Serial
-  Serial.begin(115200);
-  delay(10);
-
-  Serial.println("Connecting to " + String(SSID));
-
-  // Connect to provided SSID and PSWD
-  WiFi.begin(SSID, PSWD);
-
-  // Wait for connection to establish
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print("."); // Keep the serial monitor lit!
-    delay(500);
-  }
-
-  // Connection Succeed
-  Serial.println("");
-  Serial.println("Connected to " + String(SSID));
-
-  // Execute OTA Update
-  execOTA(host,port,bin);
-}
 
 void loop() {
   
