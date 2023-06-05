@@ -13,9 +13,7 @@ bool isValidContentType = false;
 const char* SSID = "YOUR-SSID";
 const char* PSWD = "YOUR-SSID-PSWD";
 
-// S3 Bucket Config
 
-//String host = "bucket-name.s3.ap-south-1.amazonaws.com"; // Host => bucket-name.s3.region.amazonaws.com
 String host = "https://bucketformyfrontendapplication.s3.ap-south-1.amazonaws.com/";
 
 int port = 80;.
