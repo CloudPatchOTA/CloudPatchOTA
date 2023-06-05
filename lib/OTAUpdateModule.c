@@ -1,80 +1,66 @@
-
 #include <WiFi.h>
+#include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <Update.h>
 
-#define USE_SERIAL Serial
+// Network configuration variables
+const char* ssid = "Pixel";
+const char* password = "12345678";
+const char* host = "http://3.110.114.64/“;
+const int port = 443;
 
-void DownloadAndApplyPatch(char* LinkToPatchBinary) {
-  WiFiClient client;
+// Update file variables
+const char* updateUrl = "http://13.233.137.149/updated.bin”;
+const char* updateFilename = "updated.bin";
+
+// Task handle for Communication module task
+TaskHandle_t CommunicationTaskHandle = NULL;
+
+// Communication module task
+void CommunicationTask(void *pvParameters) {
+  // Connect to WiFi network
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+  }
+
+  // Establish secure connection to update portal
+  WiFiClientSecure client;
+  if (!client.connect(host, port)) {
+    Serial.println("Failed to connect to update portal");
+    vTaskDelete(CommunicationTaskHandle);
+    return;
+  }
+
+  // Request update file
   HTTPClient http;
-
-  Serial.print("Downloading patch binary from ");
-  Serial.println(LinkToPatchBinary);
-
-  // Connect to the server
-  if (http.begin(client, LinkToPatchBinary))
-  {
-    // Send HTTP GET request
-    int httpCode = http.GET();
-
-    // Check for HTTP response code
-    if (httpCode == HTTP_CODE_OK)
-    {
-      // Get the content length of the response
-      int contentLength = http.getSize();
-
-      if (contentLength > 0)
-      {
-        // Create a buffer to store the binary data
-        uint8_t buffer[contentLength];
-        WiFiClient * stream = http.getStreamPtr();
-
-
-        // Read the response into the buffer
-        //int bytesRead = http.readBytes(buffer, contentLength);
-        int bytesRead = stream->readBytes( buffer , contentLength  );
-        if (bytesRead == contentLength)
-        {
-          // Close the HTTP connection
-          http.end();
-
-          // Apply the patch binary using the ESP32's OTA library
-          if (Update.begin(contentLength))
-          {
-            Update.write(buffer, contentLength);
-            if (Update.end())
-            {
-              Serial.println("Patch binary installation successful");
-              ESP.restart();
-            } else
-            {
-              Serial.println("Patch binary installation failed");
-            }
-          } 
-          else
-          {
-            Serial.println("Patch binary installation failed to begin");
-          }
-        }
-        else
-        {
-          Serial.println("Error reading patch binary");
-        }
-      } 
-      else
-      {
-        Serial.println("Content length is zero");
-      }
-    }
-    else
-    {
-      Serial.print("HTTP GET request failed, error: ");
-      Serial.println(http.errorToString(httpCode).c_str());
-    }
+  http.begin(client, updateUrl);
+  int httpCode = http.GET();
+  if (httpCode != HTTP_CODE_OK) {
+    Serial.println("Failed to download update file");
+    vTaskDelete(CommunicationTaskHandle);
+    return;
   }
-  else
-  {
-    Serial.println("Failed to connect to server");
+
+  // Save update file to SPIFFS
+  File updateFile = SPIFFS.open(updateFilename, FILE_WRITE);
+  if (!updateFile) {
+    Serial.println("Failed to open update file");
+    vTaskDelete(CommunicationTaskHandle);
+    return;
   }
+  http.writeToStream(&updateFile);
+  updateFile.close();
+
+void setup()
+ {
+  Serial.begin(115200);
+  SPIFFS.begin();
+
+  // Create Communication module task
+  xTaskCreatePinnedToCore(CommunicationTask, "Communication Task", 4096, NULL, 1, &CommunicationTaskHandle, 0);
+}
+
+void loop() {
+  // do nothing
 }
