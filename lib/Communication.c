@@ -4,8 +4,8 @@
 #include <Update.h>
 
 // Network configuration variables
-const char* ssid = "your_SSID";
-const char* password = "your_PASSWORD";
+const char* ssid = "Pixel";
+const char* password = "12345678";
 const char* host = "http://3.110.114.64/“;
 const int port = 443;
 
