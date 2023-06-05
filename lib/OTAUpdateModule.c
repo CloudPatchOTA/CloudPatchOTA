@@ -18,18 +18,16 @@ const char* PSWD = "YOUR-SSID-PSWD";
 //String host = "bucket-name.s3.ap-south-1.amazonaws.com"; // Host => bucket-name.s3.region.amazonaws.com
 String host = "https://bucketformyfrontendapplication.s3.ap-south-1.amazonaws.com/";
 
-int port = 80; // Non https. For HTTPS 443. As of today, HTTPS doesn't work.
+int port = 80;.
 
-//String bin = "/sketch-name.ino.bin"; // bin file name with a slash in front.
 String bin = "/updated.bin";
 
-// Utility to extract header value from headers
 String getHeaderValue(String header, String headerName) {
   return header.substring(strlen(headerName.c_str()));
 }
 
 // OTA Logic 
-void execOTA() {
+void execOTA(String host,int port,String bin) {
   Serial.println("Connecting to: " + String(host));
   // Connect to S3
   if (client.connect(host.c_str(), port)) {
@@ -57,25 +55,8 @@ void execOTA() {
         return;
       }
     }
-    // Once the response is available,
-    // check stuff
-
-    /*
-       Response Structure
-        HTTP/1.1 200 OK
-        x-amz-id-2: NVKxnU1aIQMmpGKhSwpCBh8y2JPbak18QLIfE+OiUDOos+7UftZKjtCFqrwsGOZRN5Zee0jpTd0=
-        x-amz-request-id: 2D56B47560B764EC
-        Date: Wed, 14 Jun 2017 03:33:59 GMT
-        Last-Modified: Fri, 02 Jun 2017 14:50:11 GMT
-        ETag: "d2afebbaaebc38cd669ce36727152af9"
-        Accept-Ranges: bytes
-        Content-Type: application/octet-stream
-        Content-Length: 357280
-        Server: AmazonS3
-                                   
-        {{BIN FILE CONTENTS}}
-
-    */
+  
+    
     while (client.available()) {
       // read line till /n
       String line = client.readStringUntil('\n');
@@ -194,7 +175,7 @@ void setup() {
   Serial.println("Connected to " + String(SSID));
 
   // Execute OTA Update
-  execOTA();
+  execOTA(host,port,bin);
 }
 
 void loop() {
