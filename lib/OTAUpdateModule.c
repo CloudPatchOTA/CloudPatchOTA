@@ -138,7 +138,3 @@ void execOTA(WiFiClient client,String host,int port,String bin) {
 }
 
 
-void loop() {
-  
-}
-
