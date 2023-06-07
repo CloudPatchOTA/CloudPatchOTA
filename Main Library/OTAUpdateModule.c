@@ -43,11 +43,9 @@ void execOTA(WiFiClient client,String host,int port,String bin) {
     while (client.available()) {
       // read line till /n
       String line = client.readStringUntil('\n');
-      // remove space, to check if the line is end of headers
+     
       line.trim();
 
-      // if the the line is empty,
-      // this is end of headers
       // break the while and feed the
       // remaining `client` to the
       // Update.writeStream();
@@ -83,10 +81,9 @@ void execOTA(WiFiClient client,String host,int port,String bin) {
     }
   } else {
     // Connect to S3 failed
-    // May be try?
-    // Probably a choppy network?
+   
     Serial.println("Connection to " + String(host) + " failed. Please check your setup");
-    // retry??
+  
     // execOTA();
   }
 
@@ -102,14 +99,13 @@ void execOTA(WiFiClient client,String host,int port,String bin) {
     if (canBegin) {
       Serial.println("Begin OTA. This may take 2 - 5 mins to complete. Things might be quite for a while.. Patience!");
       // No activity would appear on the Serial monitor
-      // So be patient. This may take 2 - 5mins to complete
       size_t written = Update.writeStream(client);
 
       if (written == contentLength) {
         Serial.println("Written : " + String(written) + " successfully");
       } else {
         Serial.println("Written only : " + String(written) + "/" + String(contentLength) + ". Retry?" );
-        // retry??
+       
         // execOTA();
       }
 
@@ -126,7 +122,6 @@ void execOTA(WiFiClient client,String host,int port,String bin) {
       }
     } else {
       // not enough space to begin OTA
-      // Understand the partitions and
       // space availability
       Serial.println("Not enough space to begin OTA");
       client.flush();
