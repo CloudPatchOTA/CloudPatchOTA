@@ -61,6 +61,6 @@ void setup()
   xTaskCreatePinnedToCore(CommunicationTask, "Communication Task", 4096, NULL, 1, &CommunicationTaskHandle, 0);
 }
 
-void loop() {
-  // do nothing
+void loop() 
+{
 }
