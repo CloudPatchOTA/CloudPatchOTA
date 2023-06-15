@@ -10,16 +10,7 @@
 long contentLength = 0;
 bool isValidContentType = false;
 
-// Your SSID and PSWD that the chip needs
-// to connect to
-//const char* SSID = "Pixel";
-//const char* PSWD = "87654321";
-/*
-float firmware=1.1;
-String host = "bucketwithota.s3.ap-south-1.amazonaws.com";
-int port = 80;
-String bin = "/updated.bin";
-*/
+
 
 // Utility to extract header value from headers
 String getHeaderValue(String header, String headerName) {
