@@ -4,6 +4,7 @@
 #include <Update.h>
 
 WiFiClient client;
+#define ledPin 2
 
 // Variables to validate
 // response from S3
@@ -12,17 +13,21 @@ bool isValidContentType = false;
 
 // Your SSID and PSWD that the chip needs
 // to connect to
-const char* SSID = "YOUR-SSID";
-const char* PSWD = "YOUR-SSID-PSWD";
+const char* SSID = "Pixel";
+const char* PSWD = "87654321";
+
+float firmware=1.1;
 
 // S3 Bucket Config
 
 //String host = "bucket-name.s3.ap-south-1.amazonaws.com"; // Host => bucket-name.s3.region.amazonaws.com
-String host = "https://bucketformyfrontendapplication.s3.ap-south-1.amazonaws.com/";
+//https://bucketwithota.s3.ap-south-1.amazonaws.com/updated.bin
+//String host = "https://bucketformyfrontendapplication.s3.ap-south-1.amazonaws.com/";
+//String host = "bucketformyfrontendapplication.s3.ap-south-1.amazonaws.com";
+String host = "bucketwithota.s3.ap-south-1.amazonaws.com";
 
-int port = 80; // Non https. For HTTPS 443. As of today, HTTPS doesn't work.
+int port = 80;
 
-//String bin = "/sketch-name.ino.bin"; // bin file name with a slash in front.
 String bin = "/updated.bin";
 
 // Utility to extract header value from headers
@@ -196,74 +201,30 @@ void setup() {
   Serial.println("Connected to " + String(SSID));
 
   // Execute OTA Update
+  Serial.print("firmware number : ");
+  Serial.println(firmware);
   execOTA();
+  pinMode(ledPin, OUTPUT);
 }
 
-void loop() {
-  // chill
+void loop(void) {
+  
+  digitalWrite(ledPin, HIGH);
+  delay(600); 
+  digitalWrite(ledPin, LOW);
+  delay(100);
+  digitalWrite(ledPin, HIGH);
+  delay(100);
+  digitalWrite(ledPin, LOW);
+  delay(100);
+  digitalWrite(ledPin, HIGH);
+  delay(100);
+  digitalWrite(ledPin, LOW);
+  delay(100);
+  digitalWrite(ledPin, HIGH);
+  delay(100);
+  digitalWrite(ledPin, LOW);
+  delay(100);
+  digitalWrite(ledPin, HIGH);
+  delay(100);
 }
-
-/*
- * Serial Monitor log for this sketch
- * 
- * If the OTA succeeded, it would load the preference sketch, with a small modification. i.e.
- * Print `OTA Update succeeded!! This is an example sketch : Preferences > StartCounter`
- * And then keeps on restarting every 10 seconds, updating the preferences
- * 
- * 
-      rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
-      configsip: 0, SPIWP:0x00
-      clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
-      mode:DIO, clock div:1
-      load:0x3fff0008,len:8
-      load:0x3fff0010,len:160
-      load:0x40078000,len:10632
-      load:0x40080000,len:252
-      entry 0x40080034
-      Connecting to SSID
-      ......
-      Connected to SSID
-      Connecting to: bucket-name.s3.ap-south-1.amazonaws.com
-      Fetching Bin: /StartCounter.ino.bin
-      Got application/octet-stream payload.
-      Got 357280 bytes from server
-      contentLength : 357280, isValidContentType : 1
-      Begin OTA. This may take 2 - 5 mins to complete. Things might be quite for a while.. Patience!
-      Written : 357280 successfully
-      OTA done!
-      Update successfully completed. Rebooting.
-      ets Jun  8 2016 00:22:57
-      
-      rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
-      configsip: 0, SPIWP:0x00
-      clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
-      mode:DIO, clock div:1
-      load:0x3fff0008,len:8
-      load:0x3fff0010,len:160
-      load:0x40078000,len:10632
-      load:0x40080000,len:252
-      entry 0x40080034
-      
-      OTA Update succeeded!! This is an example sketch : Preferences > StartCounter
-      Current counter value: 1
-      Restarting in 10 seconds...
-      E (102534) wifi: esp_wifi_stop 802 wifi is not init
-      ets Jun  8 2016 00:22:57
-      
-      rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
-      configsip: 0, SPIWP:0x00
-      clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
-      mode:DIO, clock div:1
-      load:0x3fff0008,len:8
-      load:0x3fff0010,len:160
-      load:0x40078000,len:10632
-      load:0x40080000,len:252
-      entry 0x40080034
-      
-      OTA Update succeeded!! This is an example sketch : Preferences > StartCounter
-      Current counter value: 2
-      Restarting in 10 seconds...
-
-      ....
- * 
- */
