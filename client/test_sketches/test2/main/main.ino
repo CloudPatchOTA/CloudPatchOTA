@@ -2,7 +2,6 @@
 
 #include <WiFi.h>
 #include <Update.h>
-
 WiFiClient client;
 #define ledPin 2
 
