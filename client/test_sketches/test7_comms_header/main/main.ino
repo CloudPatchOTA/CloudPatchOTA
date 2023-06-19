@@ -12,7 +12,7 @@ WiFiClientSecure net = WiFiClientSecure();  //client connection to server over s
 PubSubClient client(net);
 
 int OTAUpdateCallback(char* topic, byte* payload, unsigned int length) {
-  /*
+  
   String message = "";
   for (int i = 0; i < length; i++) {
     message += (char)payload[i];
@@ -20,8 +20,7 @@ int OTAUpdateCallback(char* topic, byte* payload, unsigned int length) {
 
   Serial.println(message);
   //call execOTA here
-  */
-  Serial.println("message");
+  
 }
 void setup() {
 
