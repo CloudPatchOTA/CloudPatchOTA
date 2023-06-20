@@ -70,6 +70,9 @@
       color: #333;
       font-size: 14px;
     }
+    #fileSize {
+      font-size: 14px;
+    }
 
     .progress-bar {
       background-color: #ddd;
@@ -97,7 +100,8 @@
     <form id="uploadForm" action="#" method="POST" enctype="multipart/form-data">
       <div class="form-group">
         <label for="fileInput">Select File:</label>
-        <input type="file" id="fileInput" name="file" accept=".bin">
+        <input type="file" id="fileInput" name="file" accept=".bin" onchange="displayFileSize()">
+        <p id="fileSize"></p> <!-- Display the file size here -->
       </div>
       <button type="button" onclick="uploadFile()">Upload</button>
     </form>
@@ -116,7 +120,15 @@
       secretAccessKey: 'BXPKriTVIIQKtQ3uE9VueBY8YVxUPkTe031TBsYM',
       region: 'ap-south-1'
     });
+    function displayFileSize() {
+      var fileSizeElement = document.getElementById('fileSize');
+      var file = document.getElementById('fileInput').files[0];
+      var fileSize = file.size; // Size in bytes
 
+      var fileSizeInKB = Math.round(fileSize / 1024); // Convert to KB
+
+      fileSizeElement.textContent = 'File Size: ' + fileSizeInKB + ' KB';
+    }
     // Upload the file to Amazon S3
     function uploadFile() {
       // Display loading message
