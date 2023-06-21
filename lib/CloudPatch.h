@@ -48,6 +48,9 @@ void setupOTA(int wifiTimer, int iotTimer )
 
 void checkMQTTIncomingMsg()
 {
+  if (client.subscribe("update_init")) {
+        Serial.println("subbed to topic");// move subscribe to inside connectAWSIoT
+    }
     delay(checkMsgTimer);
     //if (!client.connected() || WiFi.status() != WL_CONNECTED)
     //check connection status here
