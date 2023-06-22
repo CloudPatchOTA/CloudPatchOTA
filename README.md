@@ -2,7 +2,7 @@
 
 This project is a reusable library for FreeRTOS that provides functionality to download, verify, and apply firmware updates over the air (OTA) to embedded devices. The library, based on the BalenaOS reference design, can be seamlessly integrated into existing FreeRTOS projects.
 
-# Installation*
+# Installation
 Configure the credentials in the ```secrets.h``` file.
 Include ```CloudPatch.h``` in your project. Use the full path to the header file, or add the library to the libraries folder in your Arduino sketchbook directory. _(The sketchbook path can be found in the Arduino IDE under "File" -> "Preferences")_.
 
